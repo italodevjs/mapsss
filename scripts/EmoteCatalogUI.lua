@@ -25,18 +25,38 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.IgnoreGuiInset = true
 
--- ═══════════════════════════════════════
---  CONFIGURAÇÕES RESPONSIVAS
--- ═══════════════════════════════════════
--- Mobile: painel ocupa 65% da altura, centralizado horizontalmente
--- Desktop: painel fixo 780x560
-local panelW     = isMobile and UDim2.new(0.92, 0, 0.62, 0)   or UDim2.new(0, 780, 0, 560)
-local panelOpen  = isMobile and UDim2.new(0.04, 0, 0.36, 0)   or UDim2.new(0.5, -390, 0.5, -280)
-local panelClose = isMobile and UDim2.new(0.04, 0, 1.05, 0)   or UDim2.new(1, 20, 0.5, -280)
+-- Tamanho real da tela
+local vp = workspace.CurrentCamera.ViewportSize
+local SW = vp.X  -- largura real
+local SH = vp.Y  -- altura real
 
-local cellW   = isMobile and 120 or 150
-local cellH   = isMobile and 210 or 245
-local cellPad = isMobile and 7   or 10
+-- ═══════════════════════════════════════
+--  TAMANHOS FIXOS EM PIXELS
+-- ═══════════════════════════════════════
+local panelW, panelH, panelOpenPos, panelClosePos
+local cellW, cellH, cellPad
+
+if isMobile then
+	-- Painel: 88% da largura e 58% da altura da tela
+	panelW = math.floor(SW * 0.88)
+	panelH = math.floor(SH * 0.58)
+	-- Centralizado horizontalmente, no meio vertical
+	local px = math.floor((SW - panelW) / 2)
+	local py = math.floor((SH - panelH) / 2)
+	panelOpenPos  = UDim2.new(0, px, 0, py)
+	panelClosePos = UDim2.new(0, px, 0, SH + 20)
+	cellW   = 110
+	cellH   = 195
+	cellPad = 7
+else
+	panelW = 780
+	panelH = 560
+	panelOpenPos  = UDim2.new(0.5, -390, 0.5, -280)
+	panelClosePos = UDim2.new(1, 20, 0.5, -280)
+	cellW   = 150
+	cellH   = 245
+	cellPad = 10
+end
 
 -- ═══════════════════════════════════════
 --  BOTÃO DE ABRIR
@@ -48,15 +68,14 @@ OpenBtn.Font = Enum.Font.GothamBlack
 OpenBtn.TextColor3 = Color3.new(1, 1, 1)
 OpenBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 OpenBtn.BorderSizePixel = 0
+OpenBtn.TextSize = 13
 
 if isMobile then
-	OpenBtn.Size = UDim2.new(0, 100, 0, 38)
-	OpenBtn.Position = UDim2.new(1, -112, 0.5, -19)
-	OpenBtn.TextSize = 13
+	OpenBtn.Size = UDim2.new(0, 95, 0, 36)
+	OpenBtn.Position = UDim2.new(1, -107, 0.5, -18)
 else
 	OpenBtn.Size = UDim2.new(0, 80, 0, 36)
 	OpenBtn.Position = UDim2.new(1, -92, 0.5, -18)
-	OpenBtn.TextSize = 13
 end
 
 Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 10)
@@ -65,8 +84,8 @@ Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 10)
 --  PAINEL PRINCIPAL
 -- ═══════════════════════════════════════
 local Main = Instance.new("Frame", ScreenGui)
-Main.Size = panelW
-Main.Position = panelClose
+Main.Size = UDim2.new(0, panelW, 0, panelH)
+Main.Position = panelClosePos
 Main.BackgroundColor3 = Color3.fromRGB(11, 11, 16)
 Main.BorderSizePixel = 0
 Main.ZIndex = 10
@@ -78,7 +97,7 @@ mainStroke.Thickness = 1.5
 -- ═══════════════════════════════════════
 --  HEADER
 -- ═══════════════════════════════════════
-local headerH = isMobile and 48 or 56
+local headerH = isMobile and 46 or 56
 
 local Header = Instance.new("Frame", Main)
 Header.Size = UDim2.new(1, 0, 0, headerH)
@@ -92,7 +111,6 @@ headerLine.Position = UDim2.new(0, 0, 1, -1)
 headerLine.BackgroundColor3 = Color3.fromRGB(35, 35, 55)
 headerLine.BorderSizePixel = 0
 
--- Alça de arrastar no mobile
 if isMobile then
 	local handle = Instance.new("Frame", Header)
 	handle.Size = UDim2.new(0, 36, 0, 4)
@@ -108,7 +126,7 @@ TitleLabel.Position = UDim2.new(0, 16, 0, 0)
 TitleLabel.Text = "🕺  EMOTES"
 TitleLabel.Font = Enum.Font.GothamBlack
 TitleLabel.TextColor3 = Color3.fromRGB(240, 240, 255)
-TitleLabel.TextSize = isMobile and 15 or 18
+TitleLabel.TextSize = isMobile and 14 or 18
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -127,7 +145,7 @@ Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 7)
 --  BARRA DE PESQUISA
 -- ═══════════════════════════════════════
 local searchTop = headerH + 7
-local searchH   = isMobile and 36 or 36
+local searchH   = 34
 
 local SearchFrame = Instance.new("Frame", Main)
 SearchFrame.Size = UDim2.new(1, -24, 0, searchH)
@@ -140,7 +158,7 @@ searchStroke.Color = Color3.fromRGB(45, 45, 65)
 searchStroke.Thickness = 1
 
 local SearchIcon = Instance.new("TextLabel", SearchFrame)
-SearchIcon.Size = UDim2.new(0, 32, 1, 0)
+SearchIcon.Size = UDim2.new(0, 30, 1, 0)
 SearchIcon.Text = "🔍"
 SearchIcon.Font = Enum.Font.Gotham
 SearchIcon.TextSize = 12
@@ -148,15 +166,15 @@ SearchIcon.BackgroundTransparency = 1
 SearchIcon.TextColor3 = Color3.fromRGB(100, 100, 130)
 
 local SearchBar = Instance.new("TextBox", SearchFrame)
-SearchBar.Size = UDim2.new(1, -38, 1, 0)
-SearchBar.Position = UDim2.new(0, 32, 0, 0)
+SearchBar.Size = UDim2.new(1, -36, 1, 0)
+SearchBar.Position = UDim2.new(0, 30, 0, 0)
 SearchBar.BackgroundTransparency = 1
 SearchBar.Text = ""
 SearchBar.PlaceholderText = "Pesquisar emote..."
 SearchBar.Font = Enum.Font.Gotham
 SearchBar.TextColor3 = Color3.fromRGB(230, 230, 255)
 SearchBar.PlaceholderColor3 = Color3.fromRGB(90, 90, 115)
-SearchBar.TextSize = isMobile and 12 or 13
+SearchBar.TextSize = isMobile and 11 or 13
 SearchBar.ClearTextOnFocus = false
 SearchBar.BorderSizePixel = 0
 
@@ -229,7 +247,7 @@ end
 
 local function toggleOpen(state)
 	open = state
-	local target = open and panelOpen or panelClose
+	local target = open and panelOpenPos or panelClosePos
 	TweenService:Create(Main, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = target}):Play()
 	if isMobile then
 		OpenBtn.Visible = not open
