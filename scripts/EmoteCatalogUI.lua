@@ -3,11 +3,9 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
-local GuiService = game:GetService("GuiService")
 
 local CatalogModule = require(ReplicatedStorage:WaitForChild("CatalogModule", 10))
 
--- Detecta se é mobile
 local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 
 local open    = false
@@ -21,9 +19,6 @@ if playerGui:FindFirstChild("EmoteCatalogGUI") then
 	playerGui.EmoteCatalogGUI:Destroy()
 end
 
--- ═══════════════════════════════════════
---  SCREENGUI
--- ═══════════════════════════════════════
 local ScreenGui = Instance.new("ScreenGui", playerGui)
 ScreenGui.Name = "EmoteCatalogGUI"
 ScreenGui.ResetOnSpawn = false
@@ -31,21 +26,17 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.IgnoreGuiInset = true
 
 -- ═══════════════════════════════════════
---  TAMANHOS RESPONSIVOS
+--  CONFIGURAÇÕES RESPONSIVAS
 -- ═══════════════════════════════════════
--- Mobile: painel ocupa quase a tela toda, vindo de baixo
--- Desktop: painel lateral clássico
-local panelW  = isMobile and UDim2.new(1, 0,  0.92, 0) or UDim2.new(0, 780, 0, 560)
-local panelOpen  = isMobile
-	and UDim2.new(0, 0, 0.08, 0)
-	or  UDim2.new(0.5, -390, 0.5, -280)
-local panelClose = isMobile
-	and UDim2.new(0, 0, 1, 20)
-	or  UDim2.new(1, 20, 0.5, -280)
+-- Mobile: painel ocupa 65% da altura, centralizado horizontalmente
+-- Desktop: painel fixo 780x560
+local panelW     = isMobile and UDim2.new(0.92, 0, 0.62, 0)   or UDim2.new(0, 780, 0, 560)
+local panelOpen  = isMobile and UDim2.new(0.04, 0, 0.36, 0)   or UDim2.new(0.5, -390, 0.5, -280)
+local panelClose = isMobile and UDim2.new(0.04, 0, 1.05, 0)   or UDim2.new(1, 20, 0.5, -280)
 
-local cellW   = isMobile and 140 or 150
-local cellH   = isMobile and 235 or 245
-local cellPad = isMobile and 8   or 10
+local cellW   = isMobile and 120 or 150
+local cellH   = isMobile and 210 or 245
+local cellPad = isMobile and 7   or 10
 
 -- ═══════════════════════════════════════
 --  BOTÃO DE ABRIR
@@ -59,20 +50,16 @@ OpenBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 OpenBtn.BorderSizePixel = 0
 
 if isMobile then
-	-- Mobile: botão grande embaixo no centro
-	OpenBtn.Size = UDim2.new(0, 120, 0, 44)
-	OpenBtn.Position = UDim2.new(0.5, -60, 1, -70)
-	OpenBtn.TextSize = 14
+	OpenBtn.Size = UDim2.new(0, 100, 0, 38)
+	OpenBtn.Position = UDim2.new(0.5, -50, 1, -62)
+	OpenBtn.TextSize = 13
 else
-	-- Desktop: botão pequeno no lado esquerdo
 	OpenBtn.Size = UDim2.new(0, 80, 0, 36)
 	OpenBtn.Position = UDim2.new(0, 12, 0.5, -18)
 	OpenBtn.TextSize = 13
 end
 
 Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 10)
-
--- Botão preto fixo, sem animação de cor
 
 -- ═══════════════════════════════════════
 --  PAINEL PRINCIPAL
@@ -83,15 +70,7 @@ Main.Position = panelClose
 Main.BackgroundColor3 = Color3.fromRGB(11, 11, 16)
 Main.BorderSizePixel = 0
 Main.ZIndex = 10
-
-if isMobile then
-	-- Mobile: cantos arredondados só no topo
-	local corner = Instance.new("UICorner", Main)
-	corner.CornerRadius = UDim.new(0, 20)
-else
-	Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 18)
-end
-
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 18)
 local mainStroke = Instance.new("UIStroke", Main)
 mainStroke.Color = Color3.fromRGB(45, 45, 65)
 mainStroke.Thickness = 1.5
@@ -99,7 +78,7 @@ mainStroke.Thickness = 1.5
 -- ═══════════════════════════════════════
 --  HEADER
 -- ═══════════════════════════════════════
-local headerH = isMobile and 52 or 56
+local headerH = isMobile and 48 or 56
 
 local Header = Instance.new("Frame", Main)
 Header.Size = UDim2.new(1, 0, 0, headerH)
@@ -113,11 +92,11 @@ headerLine.Position = UDim2.new(0, 0, 1, -1)
 headerLine.BackgroundColor3 = Color3.fromRGB(35, 35, 55)
 headerLine.BorderSizePixel = 0
 
--- Alça de arrastar (mobile) — barra cinza no topo
+-- Alça de arrastar no mobile
 if isMobile then
 	local handle = Instance.new("Frame", Header)
-	handle.Size = UDim2.new(0, 40, 0, 4)
-	handle.Position = UDim2.new(0.5, -20, 0, 6)
+	handle.Size = UDim2.new(0, 36, 0, 4)
+	handle.Position = UDim2.new(0.5, -18, 0, 6)
 	handle.BackgroundColor3 = Color3.fromRGB(70, 70, 90)
 	handle.BorderSizePixel = 0
 	Instance.new("UICorner", handle).CornerRadius = UDim.new(1, 0)
@@ -125,31 +104,33 @@ end
 
 local TitleLabel = Instance.new("TextLabel", Header)
 TitleLabel.Size = UDim2.new(1, -60, 1, 0)
-TitleLabel.Position = UDim2.new(0, 20, 0, 0)
+TitleLabel.Position = UDim2.new(0, 16, 0, 0)
 TitleLabel.Text = "🕺  EMOTES"
 TitleLabel.Font = Enum.Font.GothamBlack
 TitleLabel.TextColor3 = Color3.fromRGB(240, 240, 255)
-TitleLabel.TextSize = isMobile and 16 or 18
+TitleLabel.TextSize = isMobile and 15 or 18
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local CloseBtn = Instance.new("TextButton", Header)
-CloseBtn.Size = UDim2.new(0, 30, 0, 30)
-CloseBtn.Position = UDim2.new(1, -42, 0.5, -15)
+CloseBtn.Size = UDim2.new(0, 28, 0, 28)
+CloseBtn.Position = UDim2.new(1, -38, 0.5, -14)
 CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 45, 45)
 CloseBtn.Text = "✕"
 CloseBtn.Font = Enum.Font.GothamBold
 CloseBtn.TextColor3 = Color3.new(1, 1, 1)
-CloseBtn.TextSize = 13
+CloseBtn.TextSize = 12
 CloseBtn.BorderSizePixel = 0
-Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 7)
 
 -- ═══════════════════════════════════════
 --  BARRA DE PESQUISA
 -- ═══════════════════════════════════════
-local searchTop = headerH + 8
+local searchTop = headerH + 7
+local searchH   = isMobile and 36 or 36
+
 local SearchFrame = Instance.new("Frame", Main)
-SearchFrame.Size = UDim2.new(1, -24, 0, isMobile and 40 or 36)
+SearchFrame.Size = UDim2.new(1, -24, 0, searchH)
 SearchFrame.Position = UDim2.new(0, 12, 0, searchTop)
 SearchFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 SearchFrame.BorderSizePixel = 0
@@ -159,23 +140,23 @@ searchStroke.Color = Color3.fromRGB(45, 45, 65)
 searchStroke.Thickness = 1
 
 local SearchIcon = Instance.new("TextLabel", SearchFrame)
-SearchIcon.Size = UDim2.new(0, 34, 1, 0)
+SearchIcon.Size = UDim2.new(0, 32, 1, 0)
 SearchIcon.Text = "🔍"
 SearchIcon.Font = Enum.Font.Gotham
-SearchIcon.TextSize = 13
+SearchIcon.TextSize = 12
 SearchIcon.BackgroundTransparency = 1
 SearchIcon.TextColor3 = Color3.fromRGB(100, 100, 130)
 
 local SearchBar = Instance.new("TextBox", SearchFrame)
-SearchBar.Size = UDim2.new(1, -40, 1, 0)
-SearchBar.Position = UDim2.new(0, 34, 0, 0)
+SearchBar.Size = UDim2.new(1, -38, 1, 0)
+SearchBar.Position = UDim2.new(0, 32, 0, 0)
 SearchBar.BackgroundTransparency = 1
 SearchBar.Text = ""
 SearchBar.PlaceholderText = "Pesquisar emote..."
 SearchBar.Font = Enum.Font.Gotham
 SearchBar.TextColor3 = Color3.fromRGB(230, 230, 255)
 SearchBar.PlaceholderColor3 = Color3.fromRGB(90, 90, 115)
-SearchBar.TextSize = isMobile and 14 or 13
+SearchBar.TextSize = isMobile and 12 or 13
 SearchBar.ClearTextOnFocus = false
 SearchBar.BorderSizePixel = 0
 
@@ -193,11 +174,10 @@ end)
 -- ═══════════════════════════════════════
 --  GRID DE CARDS
 -- ═══════════════════════════════════════
-local scrollTop = searchTop + (isMobile and 48 or 44)
-local scrollH   = isMobile and -(scrollTop + 8) or -(scrollTop + 8)
+local scrollTop = searchTop + searchH + 6
 
 local ScrollArea = Instance.new("ScrollingFrame", Main)
-ScrollArea.Size = UDim2.new(1, -24, 1, scrollH)
+ScrollArea.Size = UDim2.new(1, -24, 1, -(scrollTop + 8))
 ScrollArea.Position = UDim2.new(0, 12, 0, scrollTop)
 ScrollArea.BackgroundTransparency = 1
 ScrollArea.ScrollBarThickness = isMobile and 0 or 3
@@ -205,8 +185,7 @@ ScrollArea.ScrollBarImageColor3 = Color3.fromRGB(0, 130, 255)
 ScrollArea.AutomaticCanvasSize = Enum.AutomaticSize.Y
 ScrollArea.CanvasSize = UDim2.new(0, 0, 0, 0)
 ScrollArea.BorderSizePixel = 0
-ScrollArea.ScrollingDirection = Enum.ScrollingDirection.Y
-ScrollArea.ElasticBehavior = Enum.ElasticBehavior.Always -- efeito borracha no mobile
+ScrollArea.ElasticBehavior = Enum.ElasticBehavior.Always
 
 local Grid = Instance.new("UIGridLayout", ScrollArea)
 Grid.CellSize = UDim2.new(0, cellW, 0, cellH)
@@ -235,18 +214,15 @@ function load(isNext, keyword)
 	if loading then return end
 	loading = true
 	LoadingLabel.Visible = not isNext
-
 	if not isNext then
 		for _, c in ipairs(ScrollArea:GetChildren()) do
 			if c:IsA("Frame") then c:Destroy() end
 		end
 	end
-
 	local items = CatalogModule.Search(isNext, keyword)
 	for _, item in ipairs(items) do
 		CatalogModule.CreateCard(item, ScrollArea)
 	end
-
 	LoadingLabel.Visible = false
 	loading = false
 end
@@ -254,11 +230,9 @@ end
 local function toggleOpen(state)
 	open = state
 	local target = open and panelOpen or panelClose
-	TweenService:Create(Main, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = target}):Play()
-	-- Esconde o botão quando aberto no mobile (mais espaço)
+	TweenService:Create(Main, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = target}):Play()
 	if isMobile then
-		TweenService:Create(OpenBtn, TweenInfo.new(0.3), {BackgroundTransparency = open and 1 or 0}):Play()
-		OpenBtn.Active = not open
+		OpenBtn.Visible = not open
 	end
 end
 
@@ -294,7 +268,7 @@ if isMobile then
 	Main.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.Touch then
 			local delta = input.Position.Y - swipeStartY
-			if delta > 80 and ScrollArea.CanvasPosition.Y <= 0 then
+			if delta > 70 and ScrollArea.CanvasPosition.Y <= 0 then
 				toggleOpen(false)
 			end
 		end
