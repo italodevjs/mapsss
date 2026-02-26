@@ -50,7 +50,7 @@ openStroke.Transparency = 0.5
 -- ═══════════════════════════════════════
 --  PAINEL PRINCIPAL — centralizado com AnchorPoint
 -- ═══════════════════════════════════════
-local panelW = isMobile and UDim2.new(0.88, 0, 0.62, 0) or UDim2.new(0, 780, 0, 560)
+local panelW = isMobile and UDim2.new(0.94, 0, 0.74, 0) or UDim2.new(0, 780, 0, 560)
 local panelOpen  = UDim2.new(0.5, 0, 0.5, 0)   -- centro da tela
 local panelClose = isMobile
 	and UDim2.new(0.5, 0, 1.5, 0)   -- sai por baixo
@@ -180,6 +180,7 @@ ScrollArea.AutomaticCanvasSize = Enum.AutomaticSize.Y
 ScrollArea.CanvasSize = UDim2.new(0, 0, 0, 0)
 ScrollArea.BorderSizePixel = 0
 ScrollArea.ElasticBehavior = Enum.ElasticBehavior.Always
+ScrollArea.Active = true  -- bloqueia câmera ao rolar
 
 -- Lista vertical: card especial em linha inteira, depois grid de 2 colunas
 local List = Instance.new("UIListLayout", ScrollArea)

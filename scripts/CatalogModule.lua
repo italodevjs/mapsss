@@ -151,15 +151,33 @@ function CatalogModule.CreateSpecialCard(data, parent, fullWidth)
 	nameL.TextXAlignment   = Enum.TextXAlignment.Left
 	nameL.TextYAlignment   = Enum.TextYAlignment.Top
 
-	local priceL = Instance.new("TextLabel", right)
-	priceL.Size            = UDim2.new(1, 0, 0, 22)
-	priceL.Position        = UDim2.new(0, 0, 0, 52)
-	priceL.Text            = "🪙  " .. (data.Price == 0 and "GRÁTIS" or tostring(data.Price))
-	priceL.Font            = Enum.Font.GothamBold
-	priceL.TextColor3      = Color3.fromRGB(255, 255, 255)
-	priceL.TextSize        = 12
+	-- Preço estilizado
+	local priceBox = Instance.new("Frame", right)
+	priceBox.Size = UDim2.new(0, 0, 0, 26)
+	priceBox.AutomaticSize = Enum.AutomaticSize.X
+	priceBox.Position = UDim2.new(0, 0, 0, 52)
+	priceBox.BackgroundColor3 = Color3.fromRGB(35, 28, 5)
+	priceBox.BorderSizePixel = 0
+	Instance.new("UICorner", priceBox).CornerRadius = UDim.new(0, 8)
+	local pbl = Instance.new("UIListLayout", priceBox)
+	pbl.FillDirection = Enum.FillDirection.Horizontal
+	pbl.VerticalAlignment = Enum.VerticalAlignment.Center
+	pbl.Padding = UDim.new(0, 4)
+	local pbp = Instance.new("UIPadding", priceBox)
+	pbp.PaddingLeft = UDim.new(0, 8)
+	pbp.PaddingRight = UDim.new(0, 8)
+	local robuxImg = Instance.new("ImageLabel", priceBox)
+	robuxImg.Size = UDim2.new(0, 14, 0, 14)
+	robuxImg.BackgroundTransparency = 1
+	robuxImg.Image = "rbxassetid://4882430005"
+	local priceL = Instance.new("TextLabel", priceBox)
+	priceL.Size = UDim2.new(0, 0, 1, 0)
+	priceL.AutomaticSize = Enum.AutomaticSize.X
+	priceL.Text = data.Price == 0 and "GRÁTIS" or tostring(data.Price)
+	priceL.Font = Enum.Font.GothamBlack
+	priceL.TextColor3 = data.Price == 0 and Color3.fromRGB(0, 220, 100) or Color3.fromRGB(255, 220, 50)
+	priceL.TextSize = 13
 	priceL.BackgroundTransparency = 1
-	priceL.TextXAlignment  = Enum.TextXAlignment.Left
 
 	local btnHolder = Instance.new("Frame", right)
 	btnHolder.Size             = UDim2.new(1, 0, 0, 70)
@@ -233,16 +251,35 @@ function CatalogModule.CreateCard(data, parent)
 	nameL.TextXAlignment   = Enum.TextXAlignment.Center
 	nameL.TextWrapped      = true
 
-	-- Preço
-	local priceL = Instance.new("TextLabel", card)
-	priceL.Size            = UDim2.new(1, -16, 0, 18)
-	priceL.Position        = UDim2.new(0, 8, 0, 160)
-	priceL.Text            = "🪙  " .. (data.Price == 0 and "GRÁTIS" or tostring(data.Price))
-	priceL.Font            = Enum.Font.GothamBold
-	priceL.TextColor3      = Color3.fromRGB(255, 255, 255)
-	priceL.TextSize        = 11
+	-- Preço estilizado
+	local priceBox = Instance.new("Frame", card)
+	priceBox.Size = UDim2.new(0, 0, 0, 24)
+	priceBox.AutomaticSize = Enum.AutomaticSize.X
+	priceBox.Position = UDim2.new(0.5, 0, 0, 160)
+	priceBox.AnchorPoint = Vector2.new(0.5, 0)
+	priceBox.BackgroundColor3 = Color3.fromRGB(25, 25, 38)
+	priceBox.BorderSizePixel = 0
+	Instance.new("UICorner", priceBox).CornerRadius = UDim.new(0, 7)
+	local pbl = Instance.new("UIListLayout", priceBox)
+	pbl.FillDirection = Enum.FillDirection.Horizontal
+	pbl.VerticalAlignment = Enum.VerticalAlignment.Center
+	pbl.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	pbl.Padding = UDim.new(0, 4)
+	local pbp = Instance.new("UIPadding", priceBox)
+	pbp.PaddingLeft = UDim.new(0, 8)
+	pbp.PaddingRight = UDim.new(0, 8)
+	local robuxImg = Instance.new("ImageLabel", priceBox)
+	robuxImg.Size = UDim2.new(0, 13, 0, 13)
+	robuxImg.BackgroundTransparency = 1
+	robuxImg.Image = "rbxassetid://4882430005"
+	local priceL = Instance.new("TextLabel", priceBox)
+	priceL.Size = UDim2.new(0, 0, 1, 0)
+	priceL.AutomaticSize = Enum.AutomaticSize.X
+	priceL.Text = data.Price == 0 and "GRÁTIS" or tostring(data.Price)
+	priceL.Font = Enum.Font.GothamBlack
+	priceL.TextColor3 = data.Price == 0 and Color3.fromRGB(0, 220, 100) or Color3.fromRGB(255, 220, 50)
+	priceL.TextSize = 11
 	priceL.BackgroundTransparency = 1
-	priceL.TextXAlignment  = Enum.TextXAlignment.Center
 
 	-- Botões
 	local btnFrame = Instance.new("Frame", card)
