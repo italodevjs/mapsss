@@ -57,11 +57,12 @@ function CatalogModule.Search(isNext, keyword)
 end
 
 function CatalogModule.CreateCard(data, parent)
-	-- Card normal: 250px | Card especial: 280px (badge extra)
-	local cardH = data.IsSpecial and 280 or 250
+	-- Card normal: 250px | Card especial: 310px maior e mais destacado
+	local cardH = data.IsSpecial and 310 or 250
+	local cardW = data.IsSpecial and 180 or 150
 
 	local card = Instance.new("Frame", parent)
-	card.Size = UDim2.new(0, 150, 0, cardH)
+	card.Size = UDim2.new(0, cardW, 0, cardH)
 	card.BackgroundColor3 = data.IsSpecial and Color3.fromRGB(22, 17, 4) or Color3.fromRGB(20, 20, 28)
 	card.BorderSizePixel = 0
 	-- SEM ClipsDescendants para não cortar os botões
@@ -98,10 +99,11 @@ function CatalogModule.CreateCard(data, parent)
 		badgeText.ZIndex = 6
 	end
 
-	-- Imagem
+	-- Imagem (maior no especial)
 	local imgTop = data.IsSpecial and 34 or 8
+	local imgH = data.IsSpecial and 140 or 110
 	local img = Instance.new("ImageLabel", card)
-	img.Size = UDim2.new(1, -16, 0, 110)
+	img.Size = UDim2.new(1, -16, 0, imgH)
 	img.Position = UDim2.new(0, 8, 0, imgTop)
 	img.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
 	img.Image = "rbxthumb://type=Asset&id=" .. data.Id .. "&w=420&h=420"
@@ -110,7 +112,7 @@ function CatalogModule.CreateCard(data, parent)
 	Instance.new("UICorner", img).CornerRadius = UDim.new(0, 8)
 
 	-- Nome
-	local nameTop = data.IsSpecial and 150 or 124
+	local nameTop = data.IsSpecial and 180 or 124
 	local nameLabel = Instance.new("TextLabel", card)
 	nameLabel.Size = UDim2.new(1, -16, 0, 32)
 	nameLabel.Position = UDim2.new(0, 8, 0, nameTop)
@@ -124,7 +126,7 @@ function CatalogModule.CreateCard(data, parent)
 	nameLabel.TextWrapped = true
 
 	-- Preço
-	local priceTop = data.IsSpecial and 184 or 158
+	local priceTop = data.IsSpecial and 216 or 158
 	local priceFrame = Instance.new("Frame", card)
 	priceFrame.Size = UDim2.new(1, -16, 0, 18)
 	priceFrame.Position = UDim2.new(0, 8, 0, priceTop)
@@ -151,7 +153,7 @@ function CatalogModule.CreateCard(data, parent)
 
 	-- ── BOTÕES ──────────────────────────────
 	-- Posição: logo abaixo do preço, com espaço garantido
-	local btnTop = data.IsSpecial and 206 or 180
+	local btnTop = data.IsSpecial and 238 or 180
 
 	local btnFrame = Instance.new("Frame", card)
 	btnFrame.Size = UDim2.new(1, -16, 0, 58)
