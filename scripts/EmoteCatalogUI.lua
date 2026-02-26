@@ -169,9 +169,6 @@ end)
 --  GRID DE CARDS
 -- ═══════════════════════════════════════
 local scrollTop = searchTop + searchH + 6
-local cellW   = isMobile and 130 or 150
-local cellH   = isMobile and 250 or 250
-local cellPad = isMobile and 8   or 10
 
 local ScrollArea = Instance.new("ScrollingFrame", Main)
 ScrollArea.Size = UDim2.new(1, -24, 1, -(scrollTop + 8))
@@ -184,15 +181,20 @@ ScrollArea.CanvasSize = UDim2.new(0, 0, 0, 0)
 ScrollArea.BorderSizePixel = 0
 ScrollArea.ElasticBehavior = Enum.ElasticBehavior.Always
 
-local Grid = Instance.new("UIGridLayout", ScrollArea)
-Grid.CellSize = UDim2.new(0, cellW, 0, cellH)
-Grid.CellPadding = UDim2.new(0, cellPad, 0, cellPad)
-Grid.HorizontalAlignment = Enum.HorizontalAlignment.Center
-Grid.SortOrder = Enum.SortOrder.LayoutOrder
+-- Lista vertical: card especial em linha inteira, depois grid de 2 colunas
+local List = Instance.new("UIListLayout", ScrollArea)
+List.Padding = UDim.new(0, 10)
+List.HorizontalAlignment = Enum.HorizontalAlignment.Center
+List.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Container para os cards normais em grid de 2 colunas
+local NormalGrid = nil  -- criado depois do card especial
 
 local GridPad = Instance.new("UIPadding", ScrollArea)
-GridPad.PaddingTop = UDim.new(0, 6)
-GridPad.PaddingBottom = UDim.new(0, 6)
+GridPad.PaddingTop = UDim.new(0, 8)
+GridPad.PaddingBottom = UDim.new(0, 8)
+GridPad.PaddingLeft = UDim.new(0, 4)
+GridPad.PaddingRight = UDim.new(0, 4)
 
 local LoadingLabel = Instance.new("TextLabel", Main)
 LoadingLabel.Size = UDim2.new(1, 0, 0, 40)
@@ -207,6 +209,23 @@ LoadingLabel.Visible = false
 -- ═══════════════════════════════════════
 --  FUNÇÕES
 -- ═══════════════════════════════════════
+-- Container do grid de cards normais (2 colunas)
+local function getOrCreateNormalGrid()
+	if NormalGrid and NormalGrid.Parent then return NormalGrid end
+	NormalGrid = Instance.new("Frame", ScrollArea)
+	NormalGrid.Size = UDim2.new(1, 0, 0, 0)
+	NormalGrid.AutomaticSize = Enum.AutomaticSize.Y
+	NormalGrid.BackgroundTransparency = 1
+	NormalGrid.BorderSizePixel = 0
+	NormalGrid.LayoutOrder = 1
+	local g = Instance.new("UIGridLayout", NormalGrid)
+	g.CellSize    = UDim2.new(0, isMobile and 148 or 150, 0, 250)
+	g.CellPadding = UDim2.new(0, 8, 0, 8)
+	g.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	g.SortOrder   = Enum.SortOrder.LayoutOrder
+	return NormalGrid
+end
+
 function load(isNext, keyword)
 	if loading then return end
 	loading = true
@@ -215,10 +234,15 @@ function load(isNext, keyword)
 		for _, c in ipairs(ScrollArea:GetChildren()) do
 			if c:IsA("Frame") then c:Destroy() end
 		end
+		NormalGrid = nil
 	end
 	local items = CatalogModule.Search(isNext, keyword)
 	for _, item in ipairs(items) do
-		CatalogModule.CreateCard(item, ScrollArea)
+		if item.IsSpecial then
+			CatalogModule.CreateSpecialCard(item, ScrollArea)
+		else
+			CatalogModule.CreateCard(item, getOrCreateNormalGrid())
+		end
 	end
 	LoadingLabel.Visible = false
 	loading = false
