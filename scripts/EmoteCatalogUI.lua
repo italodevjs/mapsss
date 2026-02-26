@@ -57,12 +57,14 @@ local panelClose = isMobile
 	or  UDim2.new(1.5, 0, 0.5, 0)   -- sai pela direita
 
 local Main = Instance.new("Frame", ScreenGui)
-Main.AnchorPoint = Vector2.new(0.5, 0.5)   -- âncora no centro do próprio frame
+Main.AnchorPoint = Vector2.new(0.5, 0.5)
 Main.Size = panelW
 Main.Position = panelClose
 Main.BackgroundColor3 = Color3.fromRGB(11, 11, 16)
 Main.BorderSizePixel = 0
 Main.ZIndex = 10
+-- Bloqueia o input da câmera ao tocar no painel
+Main.Active = true
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 18)
 local mainStroke = Instance.new("UIStroke", Main)
 mainStroke.Color = Color3.fromRGB(45, 45, 65)
@@ -167,9 +169,9 @@ end)
 --  GRID DE CARDS
 -- ═══════════════════════════════════════
 local scrollTop = searchTop + searchH + 6
-local cellW   = isMobile and 110 or 150
-local cellH   = isMobile and 195 or 245
-local cellPad = isMobile and 7   or 10
+local cellW   = isMobile and 130 or 150
+local cellH   = isMobile and 250 or 250
+local cellPad = isMobile and 8   or 10
 
 local ScrollArea = Instance.new("ScrollingFrame", Main)
 ScrollArea.Size = UDim2.new(1, -24, 1, -(scrollTop + 8))
