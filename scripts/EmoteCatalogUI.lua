@@ -37,9 +37,15 @@ OpenBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 OpenBtn.BorderSizePixel = 0
 OpenBtn.TextSize = 13
 OpenBtn.AnchorPoint = Vector2.new(1, 0.5)
-OpenBtn.Size = UDim2.new(0, isMobile and 95 or 80, 0, 36)
-OpenBtn.Position = UDim2.new(1, -12, 0.5, 0)
-Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 10)
+OpenBtn.Size = UDim2.new(0, isMobile and 100 or 84, 0, 38)
+OpenBtn.Position = UDim2.new(1, isMobile and -16 or -14, 0.5, 0)
+Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 12)
+
+-- Sombra suave no botão
+local openStroke = Instance.new("UIStroke", OpenBtn)
+openStroke.Color = Color3.fromRGB(60, 60, 60)
+openStroke.Thickness = 1.5
+openStroke.Transparency = 0.5
 
 -- ═══════════════════════════════════════
 --  PAINEL PRINCIPAL — centralizado com AnchorPoint
