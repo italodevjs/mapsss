@@ -25,41 +25,8 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.IgnoreGuiInset = true
 
--- Tamanho real da tela
-local vp = workspace.CurrentCamera.ViewportSize
-local SW = vp.X  -- largura real
-local SH = vp.Y  -- altura real
-
 -- ═══════════════════════════════════════
---  TAMANHOS FIXOS EM PIXELS
--- ═══════════════════════════════════════
-local panelW, panelH, panelOpenPos, panelClosePos
-local cellW, cellH, cellPad
-
-if isMobile then
-	-- Painel: 88% da largura e 58% da altura da tela
-	panelW = math.floor(SW * 0.88)
-	panelH = math.floor(SH * 0.58)
-	-- Centralizado horizontalmente, no meio vertical
-	local px = math.floor((SW - panelW) / 2)
-	local py = math.floor((SH - panelH) / 2)
-	panelOpenPos  = UDim2.new(0, px, 0, py)
-	panelClosePos = UDim2.new(0, px, 0, SH + 20)
-	cellW   = 110
-	cellH   = 195
-	cellPad = 7
-else
-	panelW = 780
-	panelH = 560
-	panelOpenPos  = UDim2.new(0.5, -390, 0.5, -280)
-	panelClosePos = UDim2.new(1, 20, 0.5, -280)
-	cellW   = 150
-	cellH   = 245
-	cellPad = 10
-end
-
--- ═══════════════════════════════════════
---  BOTÃO DE ABRIR
+--  BOTÃO DE ABRIR — canto direito
 -- ═══════════════════════════════════════
 local OpenBtn = Instance.new("TextButton", ScreenGui)
 OpenBtn.ZIndex = 20
@@ -69,23 +36,24 @@ OpenBtn.TextColor3 = Color3.new(1, 1, 1)
 OpenBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 OpenBtn.BorderSizePixel = 0
 OpenBtn.TextSize = 13
-
-if isMobile then
-	OpenBtn.Size = UDim2.new(0, 95, 0, 36)
-	OpenBtn.Position = UDim2.new(1, -107, 0.5, -18)
-else
-	OpenBtn.Size = UDim2.new(0, 80, 0, 36)
-	OpenBtn.Position = UDim2.new(1, -92, 0.5, -18)
-end
-
+OpenBtn.AnchorPoint = Vector2.new(1, 0.5)
+OpenBtn.Size = UDim2.new(0, isMobile and 95 or 80, 0, 36)
+OpenBtn.Position = UDim2.new(1, -12, 0.5, 0)
 Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 10)
 
 -- ═══════════════════════════════════════
---  PAINEL PRINCIPAL
+--  PAINEL PRINCIPAL — centralizado com AnchorPoint
 -- ═══════════════════════════════════════
+local panelW = isMobile and UDim2.new(0.88, 0, 0.62, 0) or UDim2.new(0, 780, 0, 560)
+local panelOpen  = UDim2.new(0.5, 0, 0.5, 0)   -- centro da tela
+local panelClose = isMobile
+	and UDim2.new(0.5, 0, 1.5, 0)   -- sai por baixo
+	or  UDim2.new(1.5, 0, 0.5, 0)   -- sai pela direita
+
 local Main = Instance.new("Frame", ScreenGui)
-Main.Size = UDim2.new(0, panelW, 0, panelH)
-Main.Position = panelClosePos
+Main.AnchorPoint = Vector2.new(0.5, 0.5)   -- âncora no centro do próprio frame
+Main.Size = panelW
+Main.Position = panelClose
 Main.BackgroundColor3 = Color3.fromRGB(11, 11, 16)
 Main.BorderSizePixel = 0
 Main.ZIndex = 10
@@ -193,6 +161,9 @@ end)
 --  GRID DE CARDS
 -- ═══════════════════════════════════════
 local scrollTop = searchTop + searchH + 6
+local cellW   = isMobile and 110 or 150
+local cellH   = isMobile and 195 or 245
+local cellPad = isMobile and 7   or 10
 
 local ScrollArea = Instance.new("ScrollingFrame", Main)
 ScrollArea.Size = UDim2.new(1, -24, 1, -(scrollTop + 8))
@@ -247,7 +218,7 @@ end
 
 local function toggleOpen(state)
 	open = state
-	local target = open and panelOpenPos or panelClosePos
+	local target = open and panelOpen or panelClose
 	TweenService:Create(Main, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = target}):Play()
 	if isMobile then
 		OpenBtn.Visible = not open
