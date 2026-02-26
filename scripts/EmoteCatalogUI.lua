@@ -55,7 +55,7 @@ OpenBtn.ZIndex = 20
 OpenBtn.Text = "EMOTES"
 OpenBtn.Font = Enum.Font.GothamBlack
 OpenBtn.TextColor3 = Color3.new(1, 1, 1)
-OpenBtn.BackgroundColor3 = Color3.fromRGB(0, 130, 255)
+OpenBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 OpenBtn.BorderSizePixel = 0
 
 if isMobile then
@@ -72,14 +72,7 @@ end
 
 Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 10)
 
-task.spawn(function()
-	while OpenBtn and OpenBtn.Parent do
-		TweenService:Create(OpenBtn, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundColor3 = Color3.fromRGB(0, 100, 210)}):Play()
-		task.wait(1)
-		TweenService:Create(OpenBtn, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundColor3 = Color3.fromRGB(0, 130, 255)}):Play()
-		task.wait(1)
-	end
-end)
+-- Botão preto fixo, sem animação de cor
 
 -- ═══════════════════════════════════════
 --  PAINEL PRINCIPAL
