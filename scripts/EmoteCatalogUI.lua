@@ -51,11 +51,11 @@ OpenBtn.BorderSizePixel = 0
 
 if isMobile then
 	OpenBtn.Size = UDim2.new(0, 100, 0, 38)
-	OpenBtn.Position = UDim2.new(0.5, -50, 1, -62)
+	OpenBtn.Position = UDim2.new(1, -112, 0.5, -19)
 	OpenBtn.TextSize = 13
 else
 	OpenBtn.Size = UDim2.new(0, 80, 0, 36)
-	OpenBtn.Position = UDim2.new(0, 12, 0.5, -18)
+	OpenBtn.Position = UDim2.new(1, -92, 0.5, -18)
 	OpenBtn.TextSize = 13
 end
 
