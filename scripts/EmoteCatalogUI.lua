@@ -37,9 +37,9 @@ OpenBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 OpenBtn.BorderSizePixel = 0
 OpenBtn.TextSize = isMobile and 14 or 13
 -- Fica no canto direito, alinhado com o topo do painel (painel ocupa 74% da altura, centrado = topo em 13%)
-OpenBtn.AnchorPoint = Vector2.new(1, 0)
+OpenBtn.AnchorPoint = Vector2.new(1, 0.5)
 OpenBtn.Size = UDim2.new(0, isMobile and 110 or 84, 0, isMobile and 44 or 38)
-OpenBtn.Position = UDim2.new(1, isMobile and -10 or -14, isMobile and 0.13 or 0.5, 0)
+OpenBtn.Position = UDim2.new(1, isMobile and -10 or -14, 0.5, 0)
 Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 12)
 
 -- Sombra suave no botão
